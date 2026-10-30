@@ -1,89 +1,166 @@
 import { createFileRoute } from "@tanstack/react-router";
-import lionsLogo from "@/assets/lions-club-lab-logo.png.asset.json";
-import ctRoom from "@/assets/ct-scan-room.jpg";
-import healthCamp from "@/assets/health-camp.jpg";
+import lionsLogo from "@/assets/lions-club-lab-logo.jpg";
+import sampleCounter from "@/assets/lab-sample-counter.jpg";
+import campBanner from "@/assets/free-sugar-camp-banner.jpg";
+import labDesk from "@/assets/lab-desk.jpg";
+import recognitionWall from "@/assets/recognition-wall.jpg";
+import servicePoster from "@/assets/lions-club-service-poster.jpg";
+import standee from "@/assets/diagnostics-standee.jpg";
+import standeeStreet from "@/assets/standee-street-view.jpg";
+import rateCard from "@/assets/rate-card.jpg";
 
 // ─── Contact details ────────────────────────────────────────────────────────
-// PLACEHOLDERS — replace with the lab's real phone number, street address and
-// opening hours before publishing; the page must show real details for
-// WhatsApp Business verification.
-const PHONE = "";
-const PHONE_DISPLAY = "";
+// Phone and address are from the lab's rate card and signboard. HOURS is still
+// a placeholder and WHATSAPP_NUMBER is unset; the page must show real details
+// for WhatsApp Business verification.
+const PHONE_DISPLAY = "0878 3567447 · 6303792705";
 const WHATSAPP_NUMBER = "";
-const ADDRESS_LINE_1 = "Lions Club Lab, Balaji Nagar";
-const ADDRESS_LINE_2 = "Karimnagar, Telangana";
+const ADDRESS_LINE_1 = "H. No: 8-4-505/2/1/A/1, Ganesh Nagar By Pass Road";
+const ADDRESS_LINE_2 = "Karimnagar, Telangana - 505 001";
 const HOURS = "Monday – Saturday · 7:00 AM – 8:00 PM";
 
 const navItems = [
   { label: "About", href: "#about" },
   { label: "Services", href: "#services" },
+  { label: "Gallery", href: "#gallery" },
   { label: "Prices", href: "#prices" },
   { label: "Free Camps", href: "#camps" },
   { label: "Contact", href: "#contact" },
 ];
 
-// DRAFT PRICE LIST — user to confirm every figure before publishing.
-const priceRows: { test: string; detail: string; price: string }[] = [
-  { test: "CT Scan (Plain)", detail: "Head, chest, abdomen, spine & joints", price: "₹1,499" },
-  { test: "CT Scan (Contrast)", detail: "With contrast injection, as advised by doctor", price: "₹2,999" },
-  { test: "Digital X-Ray", detail: "Single view — chest, limbs, spine", price: "₹200" },
-  { test: "Ultrasound (USG)", detail: "Abdomen / pelvis / pregnancy scan", price: "₹600" },
-  { test: "ECG", detail: "12-lead electrocardiogram", price: "₹100" },
-  { test: "Complete Blood Picture (CBP)", detail: "Haemoglobin, counts and more", price: "₹200" },
-  { test: "Blood Sugar (Fasting / PP)", detail: "Random also available", price: "₹30" },
-  { test: "Lipid Profile", detail: "Cholesterol and heart-risk panel", price: "₹300" },
-  { test: "Liver Function Test (LFT)", detail: "Full liver panel", price: "₹300" },
-  { test: "Kidney Function Test (KFT)", detail: "Creatinine, urea, electrolytes", price: "₹300" },
-  { test: "Thyroid Profile", detail: "T3, T4, TSH", price: "₹300" },
-  { test: "HbA1c", detail: "Three-month sugar control", price: "₹200" },
-  { test: "Urine Routine", detail: "Complete urine examination", price: "₹100" },
-  { test: "Basic Full Body Check-up", detail: "CBP + sugar + lipid + urine + ECG", price: "₹499" },
+// From the lab's printed rate card (undated) — confirm figures are current.
+const priceCategories: { name: string; tests: { test: string; price: string }[] }[] = [
+  {
+    name: "Blood & Urine Tests",
+    tests: [
+      { test: "CBP (Complete Blood Picture)", price: "₹75" },
+      { test: "Urine Test", price: "₹30" },
+      { test: "Urine for Ketone", price: "₹30" },
+      { test: "Urine Culture", price: "₹300" },
+      { test: "CT, BT (Clotting Time, Bleeding Time)", price: "₹30" },
+      { test: "Blood Group", price: "₹20" },
+      { test: "ESR", price: "₹20" },
+    ],
+  },
+  {
+    name: "Bio Chemistry",
+    tests: [
+      { test: "Serum Bilirubin", price: "₹40" },
+      { test: "LFT (Liver Function Test)", price: "₹250" },
+      { test: "Serum Amylase", price: "₹200" },
+      { test: "Serum Lipase", price: "₹200" },
+      { test: "Lipid Profile", price: "₹300" },
+      { test: "Serum Electrolytes", price: "₹200" },
+      { test: "Serum Uric Acid", price: "₹30" },
+      { test: "Troponin T", price: "₹500" },
+      { test: "Troponin I", price: "₹400" },
+      { test: "Serum Calcium", price: "₹30" },
+      { test: "HbA1c", price: "₹250" },
+      { test: "RBS (Random Blood Sugar)", price: "₹25" },
+      { test: "FBS (Fasting Blood Sugar)", price: "₹25" },
+      { test: "PLBS (Post-Lunch Blood Sugar)", price: "₹25" },
+      { test: "Blood Urea", price: "₹30" },
+      { test: "Serum Creatinine", price: "₹30" },
+      { test: "Serum Phosphorus", price: "₹200" },
+      { test: "T3, T4, TSH", price: "₹150" },
+      { test: "Free Thyroid", price: "₹400" },
+      { test: "PT INR", price: "₹200" },
+      { test: "APTT", price: "₹200" },
+    ],
+  },
+  {
+    name: "Other Tests",
+    tests: [
+      { test: "Widal", price: "₹30" },
+      { test: "MP (Malaria Parasite)", price: "₹50" },
+      { test: "Dengue", price: "₹300" },
+      { test: "RA Factor", price: "₹50" },
+      { test: "ASO", price: "₹60" },
+      { test: "VDRL", price: "₹50" },
+      { test: "Gravindex (Urine PT)", price: "₹30" },
+      { test: "HIV", price: "₹150" },
+      { test: "HCV", price: "₹150" },
+      { test: "HBsAg", price: "₹50" },
+      { test: "CRP", price: "₹150" },
+      { test: "D-Dimer", price: "₹400" },
+      { test: "AEC", price: "₹200" },
+      { test: "Vitamin D3", price: "₹600" },
+      { test: "Vitamin B12", price: "₹500" },
+      { test: "FSH", price: "₹200" },
+      { test: "LH", price: "₹200" },
+      { test: "Prolactin", price: "₹200" },
+      { test: "Testosterone", price: "₹300" },
+      { test: "AMH", price: "₹850" },
+      { test: "Iron Profile", price: "₹850" },
+      { test: "ANA", price: "₹800" },
+      { test: "ANA Profile", price: "₹1,800" },
+      { test: "Anti CCP", price: "₹900" },
+      { test: "PSA", price: "₹550" },
+      { test: "IgE", price: "₹550" },
+      { test: "HLA B27", price: "₹850" },
+      { test: "Chikungunya", price: "₹600" },
+    ],
+  },
 ];
 
 const services = [
   {
-    title: "CT Scan",
-    text: "High-resolution CT imaging for head, chest, abdomen and bones — reported promptly, at a fraction of city-hospital rates.",
+    title: "Blood Tests",
+    text: "Everyday tests such as CBP, ESR and blood group, along with clotting and bleeding time.",
   },
   {
-    title: "Digital X-Ray",
-    text: "Instant digital radiography with clear, shareable reports for bones, chest and spine.",
+    title: "Sugar Tests",
+    text: "Fasting and after-food sugar tests for just ₹50 together, plus random sugar and HbA1c.",
   },
   {
-    title: "Ultrasound (USG)",
-    text: "Abdomen, pelvis and pregnancy scans performed by experienced sonologists.",
+    title: "Urine Tests",
+    text: "Routine urine test, urine for ketone, urine culture and urine pregnancy test.",
   },
   {
-    title: "Pathology Lab",
-    text: "Blood, urine and specialised tests processed daily, from a simple sugar test to full body panels.",
+    title: "Bio Chemistry",
+    text: "Liver, lipid, thyroid and kidney-related tests including creatinine, urea and electrolytes.",
   },
   {
-    title: "ECG",
-    text: "Quick 12-lead ECG for heart screening, read the same day.",
+    title: "Infection Tests",
+    text: "Widal, malaria, dengue, chikungunya, HIV, HCV, HBsAg and CRP.",
   },
   {
-    title: "Health Check-ups",
-    text: "Ready-made low-cost packages covering the tests most families need in one visit.",
+    title: "Vitamin & Hormone Tests",
+    text: "Vitamin D3, vitamin B12, iron profile, FSH, LH, prolactin and testosterone.",
   },
 ];
 
+const galleryPhotos = [
+  { src: labDesk, alt: "Lab desk with testing equipment at Lions Club Lab" },
+  { src: recognitionWall, alt: "Certificates, trophy and Lions Club banner on the lab wall" },
+  {
+    src: servicePoster,
+    alt: "Lions Club of Karimnagar Balajinagar 'We Serve with Humanity' poster",
+  },
+  {
+    src: standee,
+    alt: "Lions Club Diagnostics standee listing blood tests and the ₹50 sugar test",
+  },
+  { src: standeeStreet, alt: "Lions Club Diagnostics standee on Ganesh Nagar Bypass Road" },
+  { src: rateCard, alt: "Printed rate card of Lions Club Diagnostics" },
+];
+
 const campPoints = [
-  "Free blood pressure and blood sugar screening for everyone who walks in",
-  "Free doctor consultation and basic medicines at every camp",
-  "CT scan, X-ray and lab tests offered at further-reduced rates on camp days",
-  "Special camps for senior citizens, women's health and school children",
+  "Free diabetes (sugar) testing at the club's camps",
+  "Organised by Lions Club of Karimnagar Balajinagar with the help of Lions Club Diagnostics",
+  "The 2024-25 camp ran every morning from 7 to 8 AM at the lab",
 ];
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       {
-        title: "Lions Club Lab, Balaji Nagar — Affordable CT Scan & Diagnostics in Karimnagar",
+        title: "Lions Club Lab, Balaji Nagar — Affordable Blood & Urine Tests in Karimnagar",
       },
       {
         name: "description",
         content:
-          "Diagnostic centre run by Lions Club of Karimnagar Balajinagar. Low-cost CT scan, X-ray, ultrasound, blood tests and ECG, plus free community health camps.",
+          "Diagnostic centre run by Lions Club of Karimnagar Balajinagar. Low-cost blood, urine and sugar tests, plus free sugar test camps.",
       },
       {
         property: "og:title",
@@ -92,7 +169,7 @@ export const Route = createFileRoute("/")({
       {
         property: "og:description",
         content:
-          "Community diagnostics at honest prices: CT scan, X-ray, ultrasound, lab tests and free health camps by Lions Club of Karimnagar Balajinagar.",
+          "Community diagnostics at honest prices: blood, urine and sugar tests and free sugar test camps by Lions Club of Karimnagar Balajinagar.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -109,6 +186,7 @@ function Index() {
       <Hero />
       <About />
       <Services />
+      <Gallery />
       <Prices />
       <Camps />
       <Contact />
@@ -123,7 +201,7 @@ function Header() {
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
         <a href="#top" className="flex items-center gap-3">
           <img
-            src={lionsLogo.url}
+            src={lionsLogo}
             alt="Lions Club Lab logo"
             width={44}
             height={44}
@@ -158,17 +236,17 @@ function Hero() {
       <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 md:grid-cols-2 md:py-24">
         <div>
           <p className="section-label">
-            <span className="inline-block h-2 w-2 rounded-full bg-gold" />
-            A service initiative of Lions Club of Karimnagar Balajinagar
+            <span className="inline-block h-2 w-2 rounded-full bg-gold" />A service initiative of
+            Lions Club of Karimnagar Balajinagar
           </p>
           <h1 className="mt-4 text-4xl font-bold leading-tight md:text-5xl">
             Quality diagnostics at honest prices, for everyone.
           </h1>
           <div className="gold-rule mt-5" />
           <p className="mt-5 max-w-xl text-lg text-muted-foreground">
-            Lions Club Lab offers CT scan, digital X-ray, ultrasound, ECG and a full
-            pathology lab in Balaji Nagar, Karimnagar — run as a community service, not
-            a business, so rates stay within every family's reach.
+            Lions Club Lab offers everyday blood, urine and sugar tests on Ganesh Nagar Bypass Road,
+            Karimnagar — run as a community service, not a business, so rates stay within every
+            family's reach.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <a
@@ -181,21 +259,21 @@ function Hero() {
               href="#camps"
               className="rounded-full border-2 border-primary px-6 py-3 font-bold text-primary transition-colors hover:bg-accent"
             >
-              Free health camps
+              Free sugar test camps
             </a>
           </div>
           <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold text-primary">
-            <span>✓ CT Scan from ₹1,499</span>
-            <span>✓ X-Ray from ₹200</span>
-            <span>✓ Blood tests from ₹30</span>
+            <span>✓ Fasting + after-food sugar ₹50</span>
+            <span>✓ CBP ₹75</span>
+            <span>✓ Blood group ₹20</span>
           </div>
         </div>
         <div className="relative">
           <img
-            src={ctRoom}
-            alt="CT scanner room at Lions Club Lab diagnostic centre"
-            width={1024}
-            height={1024}
+            src={sampleCounter}
+            alt="Blood sample tubes on the collection counter at Lions Club Lab"
+            width={1279}
+            height={959}
             className="w-full rounded-3xl border-4 border-gold object-cover shadow-xl"
           />
         </div>
@@ -215,20 +293,19 @@ function About() {
           </h2>
           <div className="gold-rule mt-4" />
           <p className="mt-5 text-lg text-muted-foreground">
-            Lions Club Lab was started by Lions Club of Karimnagar Balajinagar with one
-            purpose: no family in our neighbourhood should skip a scan or a test because
-            they cannot afford it. The lab operates as a charitable service initiative —
-            surplus is returned to the club's community work, not to shareholders.
+            Lions Club Lab was started by Lions Club of Karimnagar Balajinagar with one purpose: no
+            family in our neighbourhood should skip a test because they cannot afford it. The lab
+            operates as a charitable service initiative — surplus is returned to the club's
+            community work, not to shareholders.
           </p>
           <p className="mt-4 text-lg text-muted-foreground">
-            Alongside everyday diagnostics, the club organises free health camps, check-up
-            drives for senior citizens and awareness programmes across Karimnagar, in line
-            with the Lions' motto, "We Serve."
+            Alongside everyday diagnostics, the club organises free sugar test camps in line with
+            the Lions' motto, "We Serve."
           </p>
           <ul className="mt-6 space-y-3">
             {[
               "Transparent, printed rate list — the same price for every patient",
-              "Qualified technicians and visiting specialist doctors",
+              "All kinds of blood tests done here, in the spirit of service",
               "Reports delivered the same day for most tests",
               "Concessions for senior citizens and families in genuine need",
             ].map((point) => (
@@ -241,7 +318,7 @@ function About() {
         </div>
         <div className="rounded-3xl border border-border bg-card p-8 text-center shadow-sm">
           <img
-            src={lionsLogo.url}
+            src={lionsLogo}
             alt="Lions Club Lab emblem"
             width={160}
             height={160}
@@ -263,7 +340,7 @@ function Services() {
     <section id="services" className="bg-parchment py-16">
       <div className="mx-auto max-w-6xl px-4">
         <p className="section-label">Our services</p>
-        <h2 className="mt-3 text-3xl font-bold md:text-4xl">Everything a family needs, under one roof</h2>
+        <h2 className="mt-3 text-3xl font-bold md:text-4xl">Everyday tests a family needs</h2>
         <div className="gold-rule mt-4" />
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {services.map((service) => (
@@ -284,64 +361,101 @@ function Services() {
   );
 }
 
+function Gallery() {
+  return (
+    <section id="gallery" className="mx-auto max-w-6xl px-4 py-16">
+      <p className="section-label">Gallery</p>
+      <h2 className="mt-3 text-3xl font-bold md:text-4xl">A look at our lab</h2>
+      <div className="gold-rule mt-4" />
+      <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {galleryPhotos.map((photo) => (
+          <a
+            key={photo.src}
+            href={photo.src}
+            target="_blank"
+            rel="noreferrer"
+            className="overflow-hidden rounded-2xl border border-border bg-muted shadow-sm transition-shadow hover:shadow-md"
+          >
+            <img
+              src={photo.src}
+              alt={photo.alt}
+              loading="lazy"
+              className="aspect-[4/3] w-full object-contain"
+            />
+          </a>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function Prices() {
   return (
-    <section id="prices" className="mx-auto max-w-5xl px-4 py-16">
-      <p className="section-label">Rate list</p>
-      <h2 className="mt-3 text-3xl font-bold md:text-4xl">Low prices for everyone</h2>
-      <div className="gold-rule mt-4" />
-      <p className="mt-4 max-w-2xl text-muted-foreground">
-        Our rates are kept deliberately low and are the same for every patient. Reports
-        for most tests are handed over or sent on WhatsApp the same day.
-      </p>
-      <div className="mt-8 overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
-        <table className="w-full text-left text-sm">
-          <thead>
-            <tr className="bg-primary text-primary-foreground">
-              <th className="px-5 py-3 font-bold">Test / Scan</th>
-              <th className="hidden px-5 py-3 font-bold sm:table-cell">Includes</th>
-              <th className="px-5 py-3 text-right font-bold">Our Price</th>
-            </tr>
-          </thead>
-          <tbody>
-            {priceRows.map((row, index) => (
-              <tr key={row.test} className={index % 2 === 0 ? "bg-background" : "bg-muted/50"}>
-                <td className="px-5 py-3 font-semibold">{row.test}</td>
-                <td className="hidden px-5 py-3 text-muted-foreground sm:table-cell">{row.detail}</td>
-                <td className="px-5 py-3 text-right font-bold text-primary">{row.price}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <section id="prices" className="bg-parchment py-16">
+      <div className="mx-auto max-w-6xl px-4">
+        <p className="section-label">Rate list</p>
+        <h2 className="mt-3 text-3xl font-bold md:text-4xl">Low prices for everyone</h2>
+        <div className="gold-rule mt-4" />
+        <p className="mt-4 max-w-2xl text-muted-foreground">
+          Our rates are kept deliberately low and are the same for every patient. Reports for most
+          tests are handed over or sent on WhatsApp the same day.
+        </p>
+        <div className="mt-8 grid items-start gap-5 lg:grid-cols-3">
+          {priceCategories.map((category) => (
+            <div
+              key={category.name}
+              className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm"
+            >
+              <table className="w-full text-left text-sm">
+                <thead>
+                  <tr className="bg-primary text-primary-foreground">
+                    <th className="px-4 py-3 font-bold">{category.name}</th>
+                    <th className="px-4 py-3 text-right font-bold">Price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {category.tests.map((row, index) => (
+                    <tr
+                      key={row.test}
+                      className={index % 2 === 0 ? "bg-background" : "bg-muted/50"}
+                    >
+                      <td className="px-4 py-2 font-semibold">{row.test}</td>
+                      <td className="px-4 py-2 text-right font-bold text-primary">{row.price}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ))}
+        </div>
+        <p className="mt-4 text-sm text-muted-foreground">
+          Rates shown are indicative and may change; please call or WhatsApp the lab for the latest
+          price list and any concession you may be eligible for.
+        </p>
       </div>
-      <p className="mt-4 text-sm text-muted-foreground">
-        Rates shown are indicative and may change; please call or WhatsApp the lab for the
-        latest price list and any concession you may be eligible for.
-      </p>
     </section>
   );
 }
 
 function Camps() {
   return (
-    <section id="camps" className="bg-parchment py-16">
+    <section id="camps" className="py-16">
       <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 md:grid-cols-2">
         <img
-          src={healthCamp}
-          alt="Free community health camp organised by Lions Club of Karimnagar Balajinagar"
-          width={1024}
-          height={1024}
+          src={campBanner}
+          alt="Free Sugar Test camp banner of Lions Club of Karimnagar Balajinagar"
+          width={700}
+          height={350}
           loading="lazy"
           className="w-full rounded-3xl border-4 border-gold object-cover shadow-xl"
         />
         <div>
           <p className="section-label">Community service</p>
-          <h2 className="mt-3 text-3xl font-bold md:text-4xl">Free health camps, open to all</h2>
+          <h2 className="mt-3 text-3xl font-bold md:text-4xl">Free sugar test camps</h2>
           <div className="gold-rule mt-4" />
           <p className="mt-5 text-lg text-muted-foreground">
-            Beyond the lab, Lions Club of Karimnagar Balajinagar regularly organises free
-            health camps in and around Karimnagar — so that cost never stands between a
-            family and a check-up.
+            Beyond everyday testing, Lions Club of Karimnagar Balajinagar organises free sugar test
+            camps — so that cost never stands between a family and a check-up.
           </p>
           <ul className="mt-6 space-y-3">
             {campPoints.map((point) => (
@@ -352,8 +466,8 @@ function Camps() {
             ))}
           </ul>
           <p className="mt-6 rounded-2xl border border-border bg-card p-4 text-sm text-muted-foreground">
-            Camp dates are announced at the lab and through local community groups. To
-            request a camp in your area, contact the club.
+            Camp dates are announced at the lab and through local community groups. To request a
+            camp in your area, contact the club.
           </p>
         </div>
       </div>
@@ -381,14 +495,8 @@ function Contact() {
                 <p className="mt-1 text-lg">{HOURS}</p>
               </div>
               <div>
-                <p className="text-sm font-bold uppercase tracking-wider text-gold">Phone / WhatsApp</p>
-                {PHONE_DISPLAY ? (
-                  <p className="mt-1 text-lg">{PHONE_DISPLAY}</p>
-                ) : (
-                  <p className="mt-1 text-lg">
-                    Phone number to be added — the lab's real number goes here.
-                  </p>
-                )}
+                <p className="text-sm font-bold uppercase tracking-wider text-gold">Phone</p>
+                <p className="mt-1 text-lg">{PHONE_DISPLAY}</p>
               </div>
             </div>
           </div>
@@ -410,12 +518,21 @@ function Footer() {
   return (
     <footer className="border-t border-border bg-card py-8">
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-2 px-4 text-center">
-        <img src={lionsLogo.url} alt="" width={40} height={40} loading="lazy" className="h-10 w-10 rounded-full" />
+        <img
+          src={lionsLogo}
+          alt=""
+          width={40}
+          height={40}
+          loading="lazy"
+          className="h-10 w-10 rounded-full"
+        />
         <p className="text-sm font-bold text-primary">Lions Club Lab · Balaji Nagar, Karimnagar</p>
         <p className="text-xs text-muted-foreground">
           A community service initiative of Lions Club of Karimnagar Balajinagar.
         </p>
-        <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} Lions Club of Karimnagar Balajinagar</p>
+        <p className="text-xs text-muted-foreground">
+          © {new Date().getFullYear()} Lions Club of Karimnagar Balajinagar
+        </p>
       </div>
     </footer>
   );
