@@ -10,10 +10,10 @@ import standeeStreet from "@/assets/standee-street-view.jpg";
 import rateCard from "@/assets/rate-card.jpg";
 
 // ─── Contact details ────────────────────────────────────────────────────────
-// Phone and address are from the lab's rate card and signboard. HOURS is still
-// a placeholder and WHATSAPP_NUMBER is unset; the page must show real details
-// for WhatsApp Business verification.
-const PHONE_DISPLAY = "0878 3567447 · 6303792705";
+// Address is from the lab's signboard. HOURS is still a placeholder and
+// WHATSAPP_NUMBER is unset; the page must show real details for WhatsApp
+// Business verification.
+const PHONE_DISPLAY = "7893906833 · +91 73826 01816";
 const WHATSAPP_NUMBER = "";
 const ADDRESS_LINE_1 = "H. No: 8-4-505/2/1/A/1, Ganesh Nagar By Pass Road";
 const ADDRESS_LINE_2 = "Karimnagar, Telangana - 505 001";
